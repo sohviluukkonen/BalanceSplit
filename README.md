@@ -1,4 +1,4 @@
-# Globally balanced multi-task splits
+# OptiSplit
 
 A tool to create well-balanced and robust data splits for (sparse) molecular datasets without data leakage between different tasks.
 
