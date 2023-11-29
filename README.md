@@ -4,7 +4,7 @@ A tool to create well-balanced and robust data splits for (sparse) molecular dat
 
 This package is based on the work of Giovanni Tricarico presented in [Construction of balanced, chemically dissimilar training, validation and test sets for machine learning on molecular datasets](https://chemrxiv.org/engage/chemrxiv/article-details/6253d85d88636ca19c0de92d). 
 
-The principe idea, is to first cluster molecules (and data points) in to many small cluster and in second step to use linear programming to combine the initial clusters into subsets to that the final fraction of molecules and the fraction of data point per task in each final subset is as close as possible to the desired fractions.
+The principle idea is to first cluster molecules (and data points) into many small clusters and in the second step to use linear programming to combine the initial clusters into subsets to that the final fraction of molecules and the fraction of data point per task in each final subset is as close as possible to the desired fractions.
 
 ## Installation
 ```
@@ -17,7 +17,7 @@ The split can be easily created from the command line with
 ```
 python -m optisplit.cli -i <dataset.csv>
 ```
-with <datasets.csv> an pivoted dataset where each row corresponds to a unique molecules and each task has it's own column. For more options use `-h/--help`.
+with <datasets.csv> a pivoted dataset where each row corresponds to unique molecules and each task has its own column. For more options use `-h/--help`.
 
 ## API
 
@@ -25,8 +25,8 @@ with <datasets.csv> an pivoted dataset where each row corresponds to a unique mo
 
 OptiSplit offers two main modes, either to
   
-1. create a single split with arbitrary number of subset of custom size, by specifying the argument `size`
-2. create k-fold cross-validation split, by specifying the argument `n_splits`
+1. create a single split with an arbitrary number of subsets of custom size, by specifying the argument `size`
+2. create a k-fold cross-validation split, by specifying the argument `n_splits`
 
 
 
@@ -45,7 +45,7 @@ y = data.drop(columns=['SMILES']).to_numpy()
 X = np.zeros((y.shape[0], 1)) # dummy not need in optisplit but required by the sklearn-format
 ```
 
-#### Single split
+#### Single Split
 
 ```
 from optisplit.splitters import OptiSplit
@@ -90,7 +90,7 @@ Test (173): [13, 18, 19, ..., 810, 835, 836]
 
 ### Splitting a dataset
 
-OptiSplit also provides a wrapper function `split_dataset` which create splits for data in a `.csv` file or `pd.DataFrame`, to compute some metrics (balance and chemical dissimilarity score) and appends the generated splits to the data.
+OptiSplit also provides a wrapper function `split_dataset` which creates splits for data in a `.csv` file or `pd.DataFrame`, to compute some metrics (balance and chemical dissimilarity score) and appends the generated splits to the data.
 
 ```
 from optisplit.data import split_dataset
