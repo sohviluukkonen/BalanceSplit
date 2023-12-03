@@ -1,21 +1,21 @@
-# OptiSplit
+# BalanceSplit
 
 A tool to create well-balanced and robust data splits for (sparse) molecular datasets without data leakage between different tasks.
 
 This package is based on the work of Giovanni Tricarico presented in [Construction of balanced, chemically dissimilar training, validation and test sets for machine learning on molecular datasets](https://chemrxiv.org/engage/chemrxiv/article-details/6253d85d88636ca19c0de92d). 
 
-The principle idea is to first cluster molecules (and data points) into many small clusters and in the second step to use linear programming to combine the initial clusters into subsets to that the final fraction of molecules and the fraction of data point per task in each final subset is as close as possible to the desired fractions.
+The main idea is to first cluster the dataset based on chemistry alone, which usually results in a fairly large number of clusters, and then use linear programming to recombine those initial clusters into final subsets, so that the fraction of molecules and data points per task, in each subset, is as close as possible to the desired one. Additionally, stratification can be used to ensure that labels (for categorical data) and distributions (for continuous data) are homogeneous in all final subsets.
 
 ## Installation
 ```
-pip install git+https://git@github.com/sohviluukkonen/OptiSplit.git@main
+pip install git+https://git@github.com/sohviluukkonen/BalanceSplit.git@main
 ```
 
 ## CLI
 The split can be easily created from the command line with
 
 ```
-python -m optisplit.cli -i <dataset.csv>
+python -m Balancesplit.cli -i <dataset.csv>
 ```
 with <datasets.csv> a pivoted dataset where each row corresponds to unique molecules and each task has its own column. For more options use `-h/--help`.
 
@@ -23,7 +23,7 @@ with <datasets.csv> a pivoted dataset where each row corresponds to unique molec
 
 ### sklearn-style splitter
 
-OptiSplit offers two main modes, either to
+BalanceSplit offers two main modes, either to
   
 1. create a single split with an arbitrary number of subsets of custom size, by specifying the argument `size`
 2. create a k-fold cross-validation split, by specifying the argument `n_splits`
@@ -39,19 +39,19 @@ Example data:
 import pandas as pd
 
 # Load data
-data = pd.read_csv('optisplit/test_data.csv')
+data = pd.read_csv('balancesplit/test_data.csv')
 smiles_list = data.SMILES.tolist()
 y = data.drop(columns=['SMILES']).to_numpy()
-X = np.zeros((y.shape[0], 1)) # dummy not need in optisplit but required by the sklearn-format
+X = np.zeros((y.shape[0], 1)) # dummy not need in balancesplit but required by the sklearn-format
 ```
 
 #### Single Split
 
 ```
-from optisplit.splitters import OptiSplit
+from balancesplit.splitters import BalanceSplit
 
 # Single 80-10-10 train-validation-test split
-split = OptiSplit(sizes=[0.8, 0.1, 0.1]).split(X, y, smiles_list)
+split = BalanceSplit(sizes=[0.8, 0.1, 0.1]).split(X, y, smiles_list)
 for (train_idx, val_idx, test_idx) for split:
     print(f"Train ({len(train_idx)}): {train_idx}")
     print(f"Validation ({len(val_idx)}): {val_idx}")
@@ -63,10 +63,10 @@ Test (89): [10, 14, 15, ..., 830, 833, 834]
 
 #### $k$-folds
 ```
-from optisplit.splitters import OptiSplit
+from balancesplit.splitters import BalanceSplit
 
 # 5-fold train-test split
-split = OptiSplit(n_splits=5).split(X, y, smiles_list)
+split = BalanceSplit(n_splits=5).split(X, y, smiles_list)
 for i, (train_idx, test_idx) for split:
     print(f"Fold {i}")
     print(f"Train ({len(train_idx)}): {train_idx}")
@@ -90,20 +90,20 @@ Test (173): [13, 18, 19, ..., 810, 835, 836]
 
 ### Splitting a dataset
 
-OptiSplit also provides a wrapper function `split_dataset` which creates splits for data in a `.csv` file or `pd.DataFrame`, to compute some metrics (balance and chemical dissimilarity score) and appends the generated splits to the data.
+BalanceSplit also provides a wrapper function `split_dataset` which creates splits for data in a `.csv` file or `pd.DataFrame`, to compute some metrics (balance and chemical dissimilarity score) and appends the generated splits to the data.
 
 ```
-from optisplit.data import split_dataset
+from balancesplit.data import split_dataset
 
-data_with_splits = split_dataset(data_path="optisplit/test_data.csv", splitter=OptiSplit(sizes=[0.8, 0.1, 0.1]))
+data_with_splits = split_dataset(data_path="balancesplit/test_data.csv", splitter=BalanceSplit(sizes=[0.8, 0.1, 0.1]))
 data_with_splits
 ```
 ![Alt text](figures/df_split.png) 
 
-and optisplit.log file is created in which some splits statistics are saved:  
+and balancesplit.log file is created in which some splits statistics are saved:  
 ![Alt text](figures/log.png)
 
-### Additional OptiSplit attributes
+### Additional BalanceSplit attributes
 
 Multiple splits
 - `n_repeats` (int, *default=1*): multiple splits can be created at once (only works with some of the clustering methods)
