@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "OptiSplit"
+name = "BalaceSplit"
 dynamic = ["version"]
 description = "Constructing Balanced and Robust Splits for Molecular Dataset"
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -36,9 +36,9 @@ dependencies = [
 where = ["."]
 
 [tool.setuptools_scm]
-write_to = "optisplit/_version.py"
+write_to = "balancesplit/_version.py"
 
 [entry_points]
 console_scripts = [
-    "optisplit = optisplit.cli:cli"
+    "balancesplit = balancesplit.cli:cli"
 ]
