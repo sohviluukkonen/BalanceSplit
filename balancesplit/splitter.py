@@ -4,23 +4,18 @@ Module for splitting data into subsets for globally balanced multi-task learning
 Authors: Sohvi Luukkonen & Giovanni Tricarico
 """
 
-from heapq import merge
-from pickletools import int4
-from turtle import st
 from typing import Generator
 import numpy as np
 import pandas as pd
 
-from abc import ABC, abstractmethod
 from pulp import *
-from sklearn.cluster import cluster_optics_dbscan
 
 from .clustering import ClusteringMethod, MaxMinClustering, RandomClustering
 from .logs import logger
 
-class OptiSplit():
+class BalanceSplit():
     """
-    Base class for OptiSplit splitters
+    Base class for BalanceSplit splitters
 
     Attributes
     ----------
@@ -119,7 +114,7 @@ class OptiSplit():
             if not (isinstance(self.clustering_method, MaxMinClustering) or isinstance(self.clustering_method, RandomClustering)):
                 raise ValueError("n_repeats only supports MaxMinClustering and RandomClustering")  
 
-        logger.info(f"OptiSplit splitter initialized with {self.n_splits} subsets of sizes {self.sizes}")  
+        logger.info(f"{type(self).__name__} splitter initialized with {self.n_splits} subsets of sizes {self.sizes}")  
             
     def split(
             self, 

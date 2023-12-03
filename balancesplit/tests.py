@@ -13,7 +13,7 @@ from .clustering import (
     LeaderPickerClustering, 
     MurckoScaffoldClustering
 )
-from .splitter import OptiSplit
+from .splitter import BalanceSplit
 from .data import split_dataset
 
 preassigned_smiles = {
@@ -44,7 +44,7 @@ class TestSplits(TestCase):
         (None, {'clustering_method' : 'predefined_clusters', 'sizes' : [0.8, 0.1, 0.1]},),
     ])
 
-    def test_OptiSplit(self, preassigned_smiles, kwargs):
+    def test_BalanceSplit(self, preassigned_smiles, kwargs):
         kwargs.update({'time_limit_seconds' : self.time_limit, })
 
         if kwargs['clustering_method'] == 'predefined_clusters':
@@ -56,7 +56,7 @@ class TestSplits(TestCase):
                 for idx in cluster:
                     kwargs['clustering_method'][i].append(self.smiles_list[idx])
 
-        splitter = OptiSplit(**kwargs)
+        splitter = BalanceSplit(**kwargs)
         split_generator = splitter.split(
             self.X, 
             self.y, 
@@ -94,10 +94,10 @@ class TestDatasetSplit(TestCase):
     X = np.zeros((y.shape[0], 1))
 
     @parameterized.expand([
-        (OptiSplit(sizes=[0.8,0.2]), {}),
-        (OptiSplit(sizes=[0.8,0.2], n_repeats=2), {}),
-        (OptiSplit(n_splits=3, n_repeats=1), {}),
-        (OptiSplit(n_splits=3, n_repeats=2), {}),
+        (BalanceSplit(sizes=[0.8,0.2]), {}),
+        (BalanceSplit(sizes=[0.8,0.2], n_repeats=2), {}),
+        (BalanceSplit(n_splits=3, n_repeats=1), {}),
+        (BalanceSplit(n_splits=3, n_repeats=2), {}),
     ])
 
     def test_split_dataset(self, splitter, kwargs):

@@ -15,7 +15,7 @@ pip install git+https://git@github.com/sohviluukkonen/BalanceSplit.git@main
 The split can be easily created from the command line with
 
 ```
-python -m Balancesplit.cli -i <dataset.csv>
+python -m balancesplit.cli -i <dataset.csv>
 ```
 with <datasets.csv> a pivoted dataset where each row corresponds to unique molecules and each task has its own column. For more options use `-h/--help`.
 
@@ -48,7 +48,7 @@ X = np.zeros((y.shape[0], 1)) # dummy not need in balancesplit but required by t
 #### Single Split
 
 ```
-from balancesplit.splitters import BalanceSplit
+from balancesplit.splitter import BalanceSplit
 
 # Single 80-10-10 train-validation-test split
 split = BalanceSplit(sizes=[0.8, 0.1, 0.1]).split(X, y, smiles_list)
@@ -63,7 +63,7 @@ Test (89): [10, 14, 15, ..., 830, 833, 834]
 
 #### $k$-folds
 ```
-from balancesplit.splitters import BalanceSplit
+from balancesplit.splitter import BalanceSplit
 
 # 5-fold train-test split
 split = BalanceSplit(n_splits=5).split(X, y, smiles_list)

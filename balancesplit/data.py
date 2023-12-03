@@ -16,13 +16,12 @@ from rdkit import Chem, DataStructs
 from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
 
 from .logs import logger
-# from .splitters import OptiSplitBase, OptiSplitSplit, OptiSplitRepeatedSplit, OptiSplitKFold, OptiSplitRepeatedKFold
-from .splitter import OptiSplit
+from .splitter import BalanceSplit
 
 def split_dataset(
         data : pd.DataFrame | None = None,
         data_path : str | None = None,
-        splitter : OptiSplit = OptiSplit(sizes=[0.8,0.2]),
+        splitter : BalanceSplit = BalanceSplit(sizes=[0.8,0.2]),
         smiles_col : str = 'SMILES',
         task_cols : list | None = None,
         ignore_cols : list | None = None,

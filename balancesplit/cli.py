@@ -2,7 +2,7 @@ import os
 import argparse
 from timeit import default_timer as timer
 from .logs.config import enable_file_logger
-from .splitter import OptiSplit
+from .splitter import BalanceSplit
 from .clustering import RandomClustering, LeaderPickerClustering, MaxMinClustering, MurckoScaffoldClustering
 from .data import split_dataset
 
@@ -99,7 +99,7 @@ def cli():
         'stratify': args.stratify,
         'sizes': args.sizes,
     }
-    splitter = OptiSplit(**splitter_kwargs)
+    splitter = BalanceSplit(**splitter_kwargs)
     
     # Split data #################################################
     split_dataset(
