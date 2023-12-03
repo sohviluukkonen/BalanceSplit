@@ -9,11 +9,12 @@ from abc import ABC, abstractmethod
 from typing import Callable
 
 from rdkit import Chem, DataStructs
-from rdkit.Chem.Scaffolds import MurckoScaffold
+# from rdkit.Chem.Scaffolds import MurckoScaffold
 from rdkit.SimDivFilters import rdSimDivPickers
 from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
 
 from .logs import logger
+from .scaffolds import Scaffold, Murcko
 
 optuna_logger = logging.getLogger('optuna')
 optuna_logger.addHandler(logger)
@@ -84,14 +85,15 @@ class RandomClustering(ClusteringMethod):
         return clusters
 
         
-class MurckoScaffoldClustering(ClusteringMethod):
+class ScaffoldClustering(ClusteringMethod):
 
     """
     Cluster a list of SMILES strings based on Murcko scaffolds.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, scaffold : Scaffold = Murcko()) -> None:
         super().__init__()
+        self.scaffold = scaffold
 
     def __call__(self, smiles_list : list[str]) -> dict:
 
@@ -108,7 +110,7 @@ class MurckoScaffoldClustering(ClusteringMethod):
             
         # Generate scaffolds for each molecule
         mols = [Chem.MolFromSmiles(smiles) for smiles in smiles_list]
-        scaffolds = [ MurckoScaffold.GetScaffoldForMol(mol) for mol in mols ]
+        scaffolds = [ self.scaffold(mol) for mol in mols ]
 
         # Get unique scaffolds and initialize clusters
         unique_scaffolds = list(set(scaffolds))

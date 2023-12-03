@@ -11,8 +11,9 @@ from .clustering import (
     RandomClustering, 
     MaxMinClustering, 
     LeaderPickerClustering, 
-    MurckoScaffoldClustering
+    ScaffoldClustering
 )
+from .scaffolds import Murcko, BemisMurcko
 from .splitter import BalanceSplit
 from .data import split_dataset
 
@@ -40,7 +41,7 @@ class TestSplits(TestCase):
         (None, {'clustering_method' : RandomClustering(), 'n_splits' : 3 , 'n_repeats' : 3}, ),
         (None, {'clustering_method' : MaxMinClustering(), 'n_splits' : 3},),
         (preassigned_smiles, {'clustering_method' : LeaderPickerClustering(), 'sizes' : [0.8, 0.1, 0.1],}, ),
-        (None, {'clustering_method' : MurckoScaffoldClustering(), 'sizes' : [0.8, 0.1, 0.1]},),
+        (None, {'clustering_method' : ScaffoldClustering(), 'sizes' : [0.8, 0.1, 0.1]},),
         (None, {'clustering_method' : 'predefined_clusters', 'sizes' : [0.8, 0.1, 0.1]},),
     ])
 
@@ -141,8 +142,13 @@ class TestClusteringMethods(TestCase):
         if n_clusters:
             assert len(clusters) == n_clusters
 
-    def test_murcko_scaffold_clustering(self):
-        clustering = MurckoScaffoldClustering()
+    @parameterized.expand([
+        (Murcko),
+        (BemisMurcko),
+    ])
+    
+    def test_murcko_scaffold_clustering(self, scaffold):
+        clustering = ScaffoldClustering()
         clusters = clustering(self.smiles_list)
         
     @parameterized.expand([
