@@ -7,16 +7,15 @@ name = "BalanceSplit"
 dynamic = ["version"]
 description = "Constructing Balanced and Robust Splits for Molecular Dataset"
 readme = { file = "README.md", content-type = "text/markdown" }
-authors = [{name = "Sohvi Luukkonen", email = "sohvi.luukkonen@hotmail.com"},]
+authors = [
+    {name = "Sohvi Luukkonen", email = "sohvi.luukkonen@hotmail.com"},
+]
 license = { file = "LICENSE" }
-keywords = ["data split", "multi-task", "balanced data"]
+keywords = ["data split", "multi-task", "balanced data", "qsar"]
 classifiers = [
+    "Programming Language :: Python :: 3.10",
     "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.7",
 ]
 
 dependencies = [
@@ -32,13 +31,23 @@ dependencies = [
     "optuna",
 ]
 
+[project.urls]
+Homepage = "https://github.com/sohviluukkonen/BalanceSplit"
+Issues = "https://github.com/sohviluukkonen/BalanceSplit/issues"
+
+
 [tool.setuptools.packages.find]
 where = ["."]
 
 [tool.setuptools_scm]
 write_to = "balancesplit/_version.py"
 
-[entry_points]
-console_scripts = [
-    "balancesplit = balancesplit.cli:cli"
-]
+# [entry_points]
+# console_scripts = [
+#     "balancesplit = balancesplit.cli:cli"
+# ]
+# [project.scripts]
+# name = "balancesplit"
+# path = "balancesplit:cli"
+[project.scripts]
+balancesplit = "balancesplit.cli:cli"
